@@ -1,131 +1,76 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import Navbar from "../components/Navbar";
+import Layout from '../components/layout';
+import {useState} from "react";
 
 export default function Home() {
+  // variables for logging in
+  const [username, setUsername] = useState("guest")
+  const [password, setPassword] = useState("")
+
+  // variables for when registering
+  const [usernameReg, setUsernameReg] = useState("")
+  const [passwordReg, setPasswordReg] = useState("")
+
+  // registering
+  const register = () => {
+    console.log("registering")
+  }
+
+  // logging in
+  const login = () => {
+    console.log("logging in")
+  }
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout>
+      <div >
+        <Head>
+          <title>Typer: Home</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family:
-            Menlo,
-            Monaco,
-            Lucida Console,
-            Liberation Mono,
-            DejaVu Sans Mono,
-            Bitstream Vera Sans Mono,
-            Courier New,
-            monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family:
-            -apple-system,
-            BlinkMacSystemFont,
-            Segoe UI,
-            Roboto,
-            Oxygen,
-            Ubuntu,
-            Cantarell,
-            Fira Sans,
-            Droid Sans,
-            Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+        <main>
+          <Navbar/>
+          <div className="p-5 h-[89vh]">
+            <h1 className="text-center font-bold mb-4 text-2xl lg:text-4xl">Home</h1>
+            <div className="pt-[5vh] flex flex-row justify-around h-[70vh]">
+              {/* register & login section */}
+              <div className="flex flex-col items-center justify-evenly h-[50vh] w-[50vw]">
+                {/* register section */}
+                <h3 className="text-xl">register</h3>
+                <div className="flex flex-col h-[40vh] justify-evenly ">
+                    <div className="flex flex-col">
+                        <label className="pb-1">Username</label>
+                        <input type="text" onChange={(event) => setUsernameReg(event.target.value)} className="px-2 py-1 rounded text-black"/>
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="pb-1">Password</label>
+                        <input type="text" onChange={(event) => setPasswordReg(event.target.value)} className="px-2 py-1 rounded text-black"/>
+                    </div>
+                </div>
+                <button onClick={register} className="text-black bg-white rounded px-1 py-0.5 border-black">register</button>
+              </div>
+              <div className="flex flex-col items-center justify-evenly h-[50vh] w-[50vw]">
+                {/* login section */}
+                <h3 className="text-xl">login</h3>
+                <div className="flex flex-col h-[40vh] justify-evenly ">
+                    <div className="flex flex-col">
+                        <label className="pb-1">Username</label>
+                        <input type="text" onChange={(event) => setUsername(event.target.value)} className="px-2 py-1 rounded text-black"/>
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="pb-1">Password</label>
+                        <input type="text" onChange={(event) => setPassword(event.target.value)} className="px-2 py-1 rounded text-black"/>
+                    </div>
+                </div>
+                <button onClick={login} className="text-black bg-white rounded px-1 py-0.5 border-black">login</button>
+              </div>
+            </div>
+            <p className="text-center">logged in as: {username}</p>
+          </div>
+       </main>
+      </div>
+    </Layout>
   );
 }

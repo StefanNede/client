@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar"
 import {useState, useEffect} from "react"
 import WordsTyper from "../components/WordsTyper"
 import QuotesTyper from "../components/QuotesTyper"
+import TimerTyper from "../components/TimerTyper"
+import ContinuousTyper from "../components/ContinuousTyper"
 
 export default function PracticeType() {
     const [testMode, setTestMode] = useState("words")
@@ -39,7 +41,21 @@ export default function PracticeType() {
                             <button className={testLength===120 ? "text-pink-300" : "text-white"} onClick={() => setTestLength(120)}>120</button>
                         </div>
                     </div>
-                    <WordsTyper testLength={testLength}/>
+                    {(() => {
+                        switch (testMode) {
+                            case "words":
+                                return <WordsTyper testLength={testLength}/>
+                            case "timer":
+                                return <TimerTyper/>
+                            case "continuous":
+                                return <ContinuousTyper/>
+                            case "quote":
+                                return <QuotesTyper/>
+                            default:
+                                console.log("ERROR WITH MODE SELECTED")
+                                break
+                        }
+                    })()}
                 </div>
             </main>
         </div>

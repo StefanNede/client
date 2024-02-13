@@ -174,7 +174,7 @@ export default function WordsTyper({ testLength }) {
     }, [timeTaken])
 
     return (
-        <div className="py-20 px-11 w-[95vw]">
+        <div className="py-20 px-11 w-[95vw] ">
             <div className="flex justify-center">
                 <div className="flex flex-row flex-wrap">
                     {lettersEls.map((letterEl, idx) => {
@@ -186,7 +186,7 @@ export default function WordsTyper({ testLength }) {
                     })}
                 </div>
             </div>
-            <div className="flex-col my-[5vh] flex w-[100vw] items-center justify-center">
+            <div className="flex-col my-[5vh] flex w-[95vw] items-center justify-center">
                 <input onKeyDown={() => checkCorrect(event)} onKeyUp={() => checkDeleted(event)} 
                     autoFocus className="rounded text-black width" type="text" tabIndex={0} 
                     autoComplete="off" autoCapitalize="off" autoCorrect="off" 

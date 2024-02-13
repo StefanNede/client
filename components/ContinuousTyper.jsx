@@ -3,8 +3,8 @@ import { GetText } from "../scripts/getText"
 
 export default function ContinuousTyper() {
     return (
-        <div>
-            continuous typer
+        <div className="w-[95vw] h-[40vh] flex items-center justify-center">
+            coming soon ...
         </div>
     )
 }

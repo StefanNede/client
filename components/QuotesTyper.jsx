@@ -31,22 +31,16 @@ const getPreviousLengths = (words, index) => {
     return s
 }
 
-export default function QuotesTyper() {
-    const [wpm, setWPM] = useState(0)
-    const [accuracy, setAccuracy] = useState(0)
-
+export default function QuotesTyper({ wpm, setWPM, accuracy, setAccuracy, showEndScreen, setShowEndScreen, char, setChar, correctChars, setCorrectChars, timeTaken, setTimeTaken }) {
     const [text, setText] = useState("")
     let words = text.split(" ")
     let letters = getLetters(text)
     const [lettersEls, setLettersEls] = useState([])
     
-    const [char, setChar] = useState(0) // holds number of total characters typed
-    const [correctChars, setCorrectChars] = useState(0) // holds number of correct characters typed
     const [index, setIndex] = useState(0) // holds the index of the word the person is on
     const [letterIndex, setLetterIndex] = useState(0) // holds the index of the letter the person is on
 
     const [startTime, setStartTime] = useState(0)
-    const [timeTaken, setTimeTaken] = useState(0)
     const averageCharactersPerWord = 5
 
     useEffect(() => {
@@ -172,6 +166,12 @@ export default function QuotesTyper() {
         setWPM((wordsTyped/secondsTaken) * 60)
         setAccuracy(acc*100)
     }, [timeTaken])
+
+    useEffect(() => {
+        if (wpm > 0) {
+            setShowEndScreen(true)
+        }
+    }, [wpm])
 
     return (
         <div className="py-20 px-11 w-[95vw] ">

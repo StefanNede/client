@@ -17,6 +17,7 @@ export default function Type() {
     const [userDetails, setUserDetails] = useState({})
     const [loginBool, setLoginBool] = useState(false)
     const [roomTest, setRoomTest] = useState(GetText(30))
+    const [roomCreator, setRoomCreator] = useState("")
 
     Axios.defaults.withCredentials = true
 
@@ -39,6 +40,7 @@ export default function Type() {
             alert("you need to be logged in to create a room")
         }
         if (roomName !== "" && !roomNameExists(roomName) && loginBool) {
+            setRoomCreator(userDetails.username)
             setJoinedRoom(true)
             // emit a socket.io signal to state the user has joined a room
             socket.emit("join_room", roomName)
@@ -63,6 +65,7 @@ export default function Type() {
             // needed so correct room gets displayed to the user 
             setRoomName(room.roomName)
             setRoomTest(room.test)
+            setRoomCreator(room.roomCreator)
             // send to backend to increment number of people in the room
             Axios.post("http://localhost:3001/join-room", {roomName: room.roomName, numUsers: room.numUsers+1}).then((response) => {
                 console.log(response)
@@ -133,7 +136,7 @@ export default function Type() {
                             </div>
                         </div>
                         :
-                        <OnlineRoom roomName={roomName} joinedRoom={joinedRoom} setJoinedRoom={setJoinedRoom} roomTest={roomTest} userDetails={userDetails} />
+                        <OnlineRoom roomName={roomName} roomCreator={roomCreator} joinedRoom={joinedRoom} setJoinedRoom={setJoinedRoom} roomTest={roomTest} userDetails={userDetails} />
                     }
                 </div>
             </main>

@@ -43,7 +43,8 @@ export default function Type() {
             setRoomCreator(userDetails.username)
             setJoinedRoom(true)
             // emit a socket.io signal to state the user has joined a room
-            socket.emit("join_room", roomName)
+            socket.emit("join_room", {roomName:roomName, username:userDetails.username})
+
             // append room to list of available rooms
             setAvailableRooms([...availableRooms, roomName]) 
             
@@ -61,6 +62,9 @@ export default function Type() {
             // there should be a maximum of 5 users in a room
             alert("this room is full")
         } else {
+            // socket stuff
+            socket.emit("join_room", {roomName:room.roomName, username:userDetails.username})
+
             // update state variables which are going to be sent to OnlineRoom component
             // needed so correct room gets displayed to the user 
             setRoomName(room.roomName)
@@ -136,7 +140,7 @@ export default function Type() {
                             </div>
                         </div>
                         :
-                        <OnlineRoom roomName={roomName} roomCreator={roomCreator} joinedRoom={joinedRoom} setJoinedRoom={setJoinedRoom} roomTest={roomTest} userDetails={userDetails} />
+                        <OnlineRoom roomName={roomName} roomCreator={roomCreator} joinedRoom={joinedRoom} setJoinedRoom={setJoinedRoom} roomTest={roomTest} userDetails={userDetails} socket={socket} />
                     }
                 </div>
             </main>

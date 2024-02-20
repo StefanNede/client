@@ -1,8 +1,16 @@
 import Axios from 'axios'
-export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoinedRoom, roomTest, userDetails } ) {
+import { useState, useEffect, useMemo } from 'react'
+
+export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoinedRoom, roomTest, userDetails, socket } ) {
+    const [userList, setUserList] = useState([userDetails.username])
+
     Axios.defaults.withCredentials = true
+
     const leaveRoom = () => {
         console.log("leaving room")
+
+        // socket stuff
+        socket.emit("leave_room", {roomName:roomName, username:userDetails.username})
 
         Axios.post("http://localhost:3001/leave-room", {roomName: roomName, userLeaving: userDetails}).then((response) => {
             console.log(response)
@@ -13,11 +21,22 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
     const deleteRoom = () => {
         console.log("deleting room")
 
+        // socket stuff
+        socket.emit("leave_room", {roomName:roomName, username:userDetails.username})
+
         Axios.post("http://localhost:3001/delete-room", {roomName: roomName, roomCreator: roomCreator}).then((response) => {
             console.log(response)
         })
         setJoinedRoom(false)
     }
+
+    useMemo(() => {
+        socket.on("update_user_list", (data) => {
+            console.log("UPDATING USER LIST")
+            console.log(data)
+            setUserList(data)
+        })
+    }, [socket])
 
     return (
         <div>
@@ -32,6 +51,17 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
                     }
                 </div>
             </header>
+            <div>
+                {/* area that shows the users */}
+                <ul className="h-[30vh] flex flex-col mt-[5vh] mx-[5vw]">
+                    {userList.map((user, i) => {
+                        return (<li className="mb-[5vh]">
+                                    <p className="text-xl font-bold">{user}</p>
+                                </li>)
+                    })}
+                </ul>
+
+            </div>
 
             <p>{roomTest}</p>
         </div>

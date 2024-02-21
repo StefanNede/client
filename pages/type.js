@@ -16,7 +16,7 @@ export default function Type() {
     const [joinedRoom, setJoinedRoom] = useState(false)
     const [userDetails, setUserDetails] = useState({})
     const [loginBool, setLoginBool] = useState(false)
-    const [roomTest, setRoomTest] = useState(GetText(30))
+    const [roomTest, setRoomTest] = useState(GetText(50))
     const [roomCreator, setRoomCreator] = useState("")
 
     Axios.defaults.withCredentials = true

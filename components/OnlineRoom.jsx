@@ -1,8 +1,11 @@
 import Axios from 'axios'
 import { useState, useEffect, useMemo } from 'react'
+import OnlineTest from './OnlineTest'
 
 export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoinedRoom, roomTest, userDetails, socket } ) {
     const [userList, setUserList] = useState([userDetails.username])
+    const [userResults, setUserResults] = useState({}) // store results for every user
+    const [userWayThrough, setUserWayThrough] = useState({}) // store the amount through the test every user is
 
     Axios.defaults.withCredentials = true
 
@@ -63,7 +66,9 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
 
             </div>
 
-            <p>{roomTest}</p>
+            <div>
+                <OnlineTest text={roomTest} />
+            </div>
         </div>
     )
 }

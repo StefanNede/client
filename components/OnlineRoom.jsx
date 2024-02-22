@@ -13,7 +13,7 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
 
     const [showEndScreen, setShowEndScreen] = useState(false)
 
-    const [roomTimer, setRoomTimer] = useState(0) // holds the time left in the room timer
+    const [roomTimer, setRoomTimer] = useState(1) // holds the time left in the room timer
 
     const sliderColours = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-purple-500", "bg-yellow-500"]
 
@@ -91,11 +91,11 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
     }, [socket])
 
     useEffect(() => {
-        if (userList.length === 1) {
+        if (userList.length === 5) {
             let start = new Date()
             setStartTime(start.getTime())
             // start countdown
-            setRoomTimer(10)
+            setRoomTimer(120)
         }
         // FOR TESTING PURPOSES
         let start = new Date()
@@ -108,14 +108,14 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
             setShowEndScreen(true)
         }
 
-        roomTimer > 0 && userList.length === 1 && setTimeout(() => {
+        roomTimer > 0 && userList.length === 5 && setTimeout(() => {
             setRoomTimer(roomTimer-1)
         }, 1000)
 
     }, [roomTimer])
 
     useEffect(() => {
-        if (usersFinished === 1) {
+        if (usersFinished === 5) {
             console.log("test is over")
             setShowEndScreen(true)
         }

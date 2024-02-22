@@ -29,7 +29,7 @@ const getPreviousLengths = (words, index) => {
     return s
 }
 
-export default function OnlineTest({ text }) {
+export default function OnlineTest({ text, socket, username, roomName }) {
     let words = text.split(" ")
     let letters = getLetters(text)
     const [lettersEls, setLettersEls] = useState([])
@@ -101,6 +101,10 @@ export default function OnlineTest({ text }) {
             // when spacebar pressed move on to the next word so update all the indexes 
             const wordTyped = event.target.value.trim()
 
+            // socket stuff
+            // emit signal word_typed, with details of roomName, username and the index of the word the user is now on (index+1)
+            socket.emit("word_typed", {roomName:roomName, username:username, wordIndex:index+1})
+
             if (wordTyped == words[index]) {
                 // if correct word typed can update indexes as expected
                 setChar(char+1)
@@ -150,8 +154,8 @@ export default function OnlineTest({ text }) {
     useEffect(() => {
         if (index === words.length) {
             console.log("test done")
-            let finish = new Date()
-            setTimeTaken(finish.getTime() - startTime)
+            // let finish = new Date()
+            // setTimeTaken(finish.getTime() - startTime)
         }
     }, [index])
 
@@ -168,7 +172,7 @@ export default function OnlineTest({ text }) {
 
     useEffect(() => {
         if (wpm > 0) {
-            setShowEndScreen(true)
+            // setShowEndScreen(true)
         }
     }, [wpm])
 
@@ -190,7 +194,6 @@ export default function OnlineTest({ text }) {
                     autoFocus className="rounded text-black width" type="text" tabIndex={0} 
                     autoComplete="off" autoCapitalize="off" autoCorrect="off" 
                     data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" list="autocompleteOff"/>
-                <button className="mt-[5vh] text-white text-3xl" onClick={() => location.reload()}>⟳</button>
             </div>
             {(wpm > 0) 
                 ? <div className="flex w-[95vw] justify-around">

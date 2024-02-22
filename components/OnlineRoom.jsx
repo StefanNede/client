@@ -4,8 +4,10 @@ import OnlineTest from './OnlineTest'
 
 export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoinedRoom, roomTest, userDetails, socket } ) {
     const [userList, setUserList] = useState([userDetails.username])
-    const [userResults, setUserResults] = useState({}) // store results for every user
-    const [userWayThrough, setUserWayThrough] = useState({}) // store the amount through the test every user is
+    const [userResults, setUserResults] = useState([{}]) // store results for every user
+    const [userWayThrough, setUserWayThrough] = useState([{}]) // store the amount through the test every user is
+
+    const sliderColours = ["bg-red-500", "bg-blue-500", "bg-green-500", "bg-purple-500", "bg-yellow-500"]
 
     Axios.defaults.withCredentials = true
 
@@ -35,11 +37,43 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
 
     useMemo(() => {
         socket.on("update_user_list", (data) => {
-            console.log("UPDATING USER LIST")
-            console.log(data)
+            // console.log("UPDATING USER LIST")
+            // console.log(data)
             setUserList(data)
+            let userRes = {}
+            let userWay = {}
+            for (let user of data) {
+                userRes[user] = 0
+                userWay[user] = 0
+            }
+            let dummyArr1 = []
+            let dummyArr2 = []
+            dummyArr1.push(userRes)
+            dummyArr2.push(userWay)
+            setUserResults(dummyArr1)
+            setUserWayThrough(dummyArr2)
+        })
+
+        socket.on("update_user_sliders", (data) => {
+            console.log("UPDATING USER SLIDERS")
+            console.log(data)
+            let userUpdated = data[0]
+            let newWordIndex = data[1]
+            let newUserWay = userWayThrough[0]
+            // divide by total number of words (50) and multiply by width of bar (60) to get
+            // amount of vw needed for the left margin when rendering
+            newUserWay[userUpdated] = (newWordIndex/50)*60
+            let dummyArr1 = []
+            dummyArr1.push(newUserWay)
+            setUserWayThrough(dummyArr1)
         })
     }, [socket])
+
+    useEffect(() => {
+        console.log("user way through: " )
+        console.log(userWayThrough[0]["stefan"])
+    }, [userWayThrough])
+
 
     return (
         <div>
@@ -58,16 +92,25 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
                 {/* area that shows the users */}
                 <ul className="h-[30vh] flex flex-col mt-[5vh] mx-[5vw]">
                     {userList.map((user, i) => {
-                        return (<li className="mb-[5vh]">
-                                    <p className="text-xl font-bold">{user}</p>
+
+                        return (<li className="mb-[5vh] flex items-center">
+                                    <p className="text-xl font-bold w-[13vw]">{user}</p>
+                                    <div className="">
+                                        {/* user slider shiiii */}
+                                        <div style={{marginLeft:`${userWayThrough[0][user]}%`}} className={` ${sliderColours[i]} mt-[-1.2vh] h-[3vh] w-[3vh] rounded-full absolute`}>
+                                            {/* the circle indicating user position*/}
+                                        </div>
+                                        <div className="bg-white h-[0.5vh] w-[60vw] "> 
+                                            {/* the line */}
+                                        </div>
+                                    </div>
                                 </li>)
                     })}
                 </ul>
 
             </div>
-
             <div>
-                <OnlineTest text={roomTest} />
+                <OnlineTest text={roomTest} socket={socket} username={userDetails.username} roomName={roomName} />
             </div>
         </div>
     )

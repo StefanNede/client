@@ -29,7 +29,7 @@ const getPreviousLengths = (words, index) => {
     return s
 }
 
-export default function OnlineTest({ text, socket, username, roomName }) {
+export default function OnlineTest({ text, socket, username, roomName, startTime, usersFinished, setUsersFinished }) {
     let words = text.split(" ")
     let letters = getLetters(text)
     const [lettersEls, setLettersEls] = useState([])
@@ -42,7 +42,6 @@ export default function OnlineTest({ text, socket, username, roomName }) {
     const [wpm, setWPM] = useState(0)
     const [accuracy, setAccuracy] = useState(0)
 
-    const [startTime, setStartTime] = useState(0)
     const [timeTaken, setTimeTaken] = useState(0)
     const averageCharactersPerWord = 5
 
@@ -71,12 +70,6 @@ export default function OnlineTest({ text, socket, username, roomName }) {
     }
 
     function checkCorrect(event) {
-        if (index == 0 && startTime === 0) {
-            // if on the first word and the timer hasn't been started start timer by recording start time
-            let start = new Date();
-            setStartTime(start.getTime());
-        }
-
         if (event.key === "Shift" || event.key === "CapsLock") {
             return 
         }
@@ -102,8 +95,14 @@ export default function OnlineTest({ text, socket, username, roomName }) {
             const wordTyped = event.target.value.trim()
 
             // socket stuff
-            // emit signal word_typed, with details of roomName, username and the index of the word the user is now on (index+1)
-            socket.emit("word_typed", {roomName:roomName, username:username, wordIndex:index+1})
+            // emit signal word_typed, with details of roomName, username, the index of the word the user is now on (index+1), and current wpm score
+            let currentDate = new Date()
+            let secondsPassed = (currentDate.getTime() - startTime)/1000 // stores time passed from the start of the test in seconds
+            let currentWordsTyped = correctChars/averageCharactersPerWord
+            let currentWPM  = (currentWordsTyped/secondsPassed)*60
+
+            // setTimeTaken(finish.getTime() - startTime)
+            socket.emit("word_typed", {roomName:roomName, username:username, wordIndex:index+1, currentWPM:currentWPM})
 
             if (wordTyped == words[index]) {
                 // if correct word typed can update indexes as expected
@@ -154,8 +153,7 @@ export default function OnlineTest({ text, socket, username, roomName }) {
     useEffect(() => {
         if (index === words.length) {
             console.log("test done")
-            // let finish = new Date()
-            // setTimeTaken(finish.getTime() - startTime)
+            setUsersFinished(usersFinished+1)
         }
     }, [index])
 

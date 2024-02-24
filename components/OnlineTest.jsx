@@ -168,12 +168,6 @@ export default function OnlineTest({ text, socket, username, roomName, startTime
         setAccuracy(acc*100)
     }, [timeTaken])
 
-    useEffect(() => {
-        if (wpm > 0) {
-            // setShowEndScreen(true)
-        }
-    }, [wpm])
-
     return (
         <div className="py-20 px-11 w-[95vw] ">
             <div className="flex justify-center">

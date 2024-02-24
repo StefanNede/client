@@ -115,7 +115,7 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
     }, [roomTimer])
 
     useEffect(() => {
-        if (usersFinished === 5) {
+        if (usersFinished === 1) {
             console.log("test is over")
             setShowEndScreen(true)
         }

@@ -1,4 +1,6 @@
 // component for the end screen that shows on the completion of a multiplayer test
+import Axios from 'axios'
+import { useState, useEffect, useMemo } from 'react'
 
 export default function MultiEnd({ roomName, roomCreator, userResults, setJoinedRoom, userDetails, socket }) {
     let userScores = userResults[0]
@@ -19,7 +21,33 @@ export default function MultiEnd({ roomName, roomCreator, userResults, setJoined
         return sortedArr
     }
 
+    const updateHighScore = (userScores) => {
+        // compare user score with stored high scores in userDetails and send POST request to update high score if necessary
+        let userScore = userResults[0][userDetails.username] // the user's score 
+        let newBestScore = userDetails.bestScore // variable to store user's best score
+        let userWins = userDetails.numWins // variable to store the user's win count
+        let userLosses = userDetails.numLosses // variable to store the user's loss count
+
+        // updating user's best score
+        if (userScore > userDetails.bestScore) {
+            newBestScore = userScore
+        }
+
+        // updating user's win and loss count
+        if (userDetails.username === userScores[0][0]) {
+            userWins += 1
+        } else {
+            userLosses += 1
+        }
+
+        // send POST request to database to update user details
+        Axios.post("http://localhost:3001/update-userInfo", {username:userDetails.username, bestScore:newBestScore, numWins:userWins, numLosses:userLosses}).then((response) => {
+            console.log(response)
+        })
+    }
+
     userScores = sortScores(userScores)
+    updateHighScore(userScores)
 
     return (
         <div>

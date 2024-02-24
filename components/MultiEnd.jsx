@@ -3,6 +3,8 @@ import Axios from 'axios'
 import { useState, useEffect, useMemo } from 'react'
 
 export default function MultiEnd({ roomName, roomCreator, userResults, setJoinedRoom, userDetails, socket }) {
+    const [leaderboardArray, setLeaderboardArray] = useState([])
+    const [leaderboardFetched, setLeaderboardFetched] = useState(false)
     let userScores = userResults[0]
 
     const sortScores = (userScores) => {
@@ -48,6 +50,26 @@ export default function MultiEnd({ roomName, roomCreator, userResults, setJoined
 
     userScores = sortScores(userScores)
     updateHighScore(userScores)
+
+    useEffect(() => {
+        // getting the leaderboard
+        Axios.get("http://localhost:3001/get-leaderboard").then((response) => {
+            console.log("LEADERBOARD")
+            setLeaderboardArray(JSON.parse(response.data[0].rankings).leaderboard) // store to state variable to be ammended
+            setLeaderboardFetched(true) // to trigger updating of the leaderboard 
+        })
+    }, [])
+
+    useEffect(() => {
+        // updating the leaderboard
+        if (leaderboardFetched) {
+            console.log("UPDATING LEADERBOARD")
+            // go through userScores and insert into array then slice to only have top 100 scores
+
+
+            console.log(leaderboardArray)
+        }
+    }, [leaderboardFetched])
 
     return (
         <div>

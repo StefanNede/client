@@ -1,3 +1,4 @@
+import Axios from 'axios'
 import Navbar from "../components/Navbar"
 import Head from 'next/head';
 import {useState, useEffect} from "react"
@@ -7,7 +8,9 @@ export default function Leaderboard() {
     
     // get leaderboard from database
     useEffect(() => {
-        setLeaderboard([["user1", 280], ["user2", 170], ["user3", 150]])
+        Axios.get("http://localhost:3001/get-leaderboard").then((response) => {
+            setLeaderboard(JSON.parse(response.data[0].rankings).leaderboard) 
+        })
     }, [])
 
     return (

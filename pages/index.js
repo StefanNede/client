@@ -66,6 +66,10 @@ export default function Home() {
     })
   }, [])
 
+  useEffect(() => {
+    console.log(userDetails)
+  }, [userDetails])
+
   return (
     <Layout>
       <div >

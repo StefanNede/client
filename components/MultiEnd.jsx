@@ -2,7 +2,7 @@
 import Axios from 'axios'
 import { useState, useEffect, useMemo } from 'react'
 
-export default function MultiEnd({ roomName, roomCreator, userResults, setJoinedRoom, userDetails, socket }) {
+export default function MultiEnd({ roomName, roomCreator, userResults, setJoinedRoom, userDetails, setUserDetails, socket }) {
     const [leaderboardArray, setLeaderboardArray] = useState([])
     const [leaderboardFetched, setLeaderboardFetched] = useState(false)
     let userScores = userResults[0]
@@ -46,15 +46,25 @@ export default function MultiEnd({ roomName, roomCreator, userResults, setJoined
         Axios.post("http://localhost:3001/update-userInfo", {username:userDetails.username, bestScore:newBestScore, numWins:userWins, numLosses:userLosses}).then((response) => {
             console.log(response)
         })
+
+        // update userDetails
+        setUserDetails(
+            {username:userDetails.username, 
+            bestScore:newBestScore, 
+            bestAccuracy:userDetails.bestAccuracy, 
+            numWins:userWins, 
+            numLosses:userLosses, 
+            userID:userDetails.userID, 
+            password:userDetails.password}
+        )
     }
 
     userScores = sortScores(userScores)
-    updateHighScore(userScores)
 
     useEffect(() => {
+        updateHighScore(userScores)
         // getting the leaderboard
         Axios.get("http://localhost:3001/get-leaderboard").then((response) => {
-            console.log("LEADERBOARD")
             setLeaderboardArray(JSON.parse(response.data[0].rankings).leaderboard) // store to state variable to be ammended
             setLeaderboardFetched(true) // to trigger updating of the leaderboard 
         })
@@ -63,11 +73,30 @@ export default function MultiEnd({ roomName, roomCreator, userResults, setJoined
     useEffect(() => {
         // updating the leaderboard
         if (leaderboardFetched) {
-            console.log("UPDATING LEADERBOARD")
-            // go through userScores and insert into array then slice to only have top 100 scores
+            console.log("NEW LEADERBOARD")
+            // insert userScores into array then sort array then slice array to only have top 100 scores
+            let interLeaderboard = [] // intermediate leaderboard
+            
+            // inserting into array
+            for (let leaderboardUser of leaderboardArray) {
+                interLeaderboard.push(leaderboardUser)
+            }
+            for (var user in userResults[0]) {
+                interLeaderboard.push([user, userResults[0][user]])
+            }
 
+            // sorting array
+            interLeaderboard.sort(function(a, b) {
+                return b[1] - a[1]
+            })
 
-            console.log(leaderboardArray)
+            // slicing array
+            let top100 = interLeaderboard.slice(0, 100)
+
+            // update database
+            Axios.post("http://localhost:3001/update-leaderboard", {newLeaderboard:top100}).then((response) => {
+                console.log(response)
+            })
         }
     }, [leaderboardFetched])
 

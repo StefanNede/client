@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import OnlineTest from './OnlineTest'
 import MultiEnd from './MultiEnd'
 
-export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoinedRoom, roomTest, userDetails, socket } ) {
+export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoinedRoom, roomTest, userDetails, setUserDetails, socket } ) {
     const [userList, setUserList] = useState([userDetails.username])
     const [userResults, setUserResults] = useState([{}]) // store results for every user
     const [userWayThrough, setUserWayThrough] = useState([{}]) // store the amount through the test every user is
@@ -97,9 +97,6 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
             // start countdown
             setRoomTimer(120)
         }
-        // FOR TESTING PURPOSES
-        let start = new Date()
-        setStartTime(start.getTime())
     }, [userList])
 
     useEffect(() => {
@@ -115,7 +112,7 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
     }, [roomTimer])
 
     useEffect(() => {
-        if (usersFinished === 1) {
+        if (usersFinished === 5) {
             console.log("test is over")
             setShowEndScreen(true)
         }
@@ -135,7 +132,7 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
                 </div>
             </header>
             { showEndScreen ? 
-                <MultiEnd roomName={roomName} roomCreator={roomCreator} userResults={userResults} setJoinedRoom={setJoinedRoom} userDetails={userDetails} socket={socket} />
+                <MultiEnd roomName={roomName} roomCreator={roomCreator} userResults={userResults} setJoinedRoom={setJoinedRoom} userDetails={userDetails} setUserDetails={setUserDetails} socket={socket} />
             :
             <>
                 <h3 className="text-center text-3xl font-semibold text-blue-300">{roomTimer}</h3>

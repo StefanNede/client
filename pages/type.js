@@ -140,7 +140,7 @@ export default function Type() {
                             </div>
                         </div>
                         :
-                        <OnlineRoom roomName={roomName} roomCreator={roomCreator} joinedRoom={joinedRoom} setJoinedRoom={setJoinedRoom} roomTest={roomTest} userDetails={userDetails} socket={socket} />
+                        <OnlineRoom roomName={roomName} roomCreator={roomCreator} joinedRoom={joinedRoom} setJoinedRoom={setJoinedRoom} roomTest={roomTest} userDetails={userDetails} setUserDetails={setUserDetails} socket={socket} />
                     }
                 </div>
             </main>

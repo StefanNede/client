@@ -121,7 +121,7 @@ export default function OnlineRoom( { roomName, roomCreator, joinedRoom, setJoin
     return (
         <div>
             <header className="flex justify-between">
-                <h1>{roomName}</h1>
+                <h1 className="text-3xl text-pink-300 ml-[5vw]">{roomName}</h1>
                 <div>
                     <button className="bg-white text-black rounded px-2" onClick={leaveRoom}>leave</button>
                     { roomCreator === userDetails.username ? 

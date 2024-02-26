@@ -16,7 +16,7 @@ export default function Home() {
   const [usernameReg, setUsernameReg] = useState("")
   const [passwordReg, setPasswordReg] = useState("")
 
-  const [loginStatus, setLoginStatus] = useState("Not logged in")
+  const [loginStatus, setLoginStatus] = useState("Not Logged In")
   const [loginBool, setLoginBool] = useState(false)
 
   // for cookies
@@ -44,13 +44,13 @@ export default function Home() {
       let data = response.data
       console.log(data)
       if (data.message) {
-        setLoginStatus("Not logged in")
+        setLoginStatus("Not Logged In")
         setLoginBool(false)
         alert(data.message)
       } else {
         // user logged in
         setUserDetails(data[0])
-        setLoginStatus("Logged in as: " + data[0].username)
+        setLoginStatus("Logged In As: " + data[0].username)
         setLoginBool(true)
       }
     })
@@ -60,7 +60,7 @@ export default function Home() {
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn) {
         setUserDetails(response.data.user[0])
-        setLoginStatus("Logged in as: " + response.data.user[0].username)
+        setLoginStatus("Logged In As: " + response.data.user[0].username)
         setLoginBool(true)
       }
     })
@@ -91,7 +91,7 @@ export default function Home() {
                     {/* register & login section */}
                     <div className="flex flex-col items-center justify-evenly h-[50vh] w-[50vw]">
                       {/* register section */}
-                      <h3 className="text-xl">register</h3>
+                      <h3 className="text-xl">Register</h3>
                       <div className="flex flex-col h-[40vh] justify-evenly ">
                           <div className="flex flex-col">
                               <label className="pb-1">Username</label>
@@ -102,11 +102,11 @@ export default function Home() {
                               <input type="text" onChange={(event) => setPasswordReg(event.target.value)} className="px-2 py-1 rounded text-black"/>
                           </div>
                       </div>
-                      <button onClick={register} className="text-black bg-white rounded px-1 py-0.5 border-black">register</button>
+                      <button onClick={register} className="text-black bg-white rounded px-2 py-1 border-black">Register</button>
                     </div>
                     <div className="flex flex-col items-center justify-evenly h-[50vh] w-[50vw]">
                       {/* login section */}
-                      <h3 className="text-xl">login</h3>
+                      <h3 className="text-xl">Login</h3>
                       <div className="flex flex-col h-[40vh] justify-evenly ">
                           <div className="flex flex-col">
                               <label className="pb-1">Username</label>
@@ -117,7 +117,7 @@ export default function Home() {
                               <input type="text" onChange={(event) => setPassword(event.target.value)} className="px-2 py-1 rounded text-black"/>
                           </div>
                       </div>
-                      <button onClick={login} className="text-black bg-white rounded px-1 py-0.5 border-black">login</button>
+                      <button onClick={login} className="text-black bg-white rounded px-2 py-1 border-black">Login</button>
                     </div>
                   </div>
               }

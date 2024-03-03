@@ -1,6 +1,9 @@
+// code for the offline typing mode page
+
+// library imports
 import Head from "next/head"
 import Navbar from "../components/Navbar"
-import {useState, useEffect} from "react"
+import { useState } from "react"
 import WordsTyper from "../components/WordsTyper"
 import QuotesTyper from "../components/QuotesTyper"
 import TimerTyper from "../components/TimerTyper"
@@ -8,8 +11,9 @@ import ContinuousTyper from "../components/ContinuousTyper"
 import EndOfTest from "../components/EndOfTest"
 
 export default function PracticeType() {
-    const [testMode, setTestMode] = useState("words")
-    const [testLength, setTestLength] = useState(15)
+    // state variables
+    const [testMode, setTestMode] = useState("words") // holds the test mode selected
+    const [testLength, setTestLength] = useState(15) // holds the test length selected
 
     const [char, setChar] = useState(0) // holds number of total characters typed
     const [correctChars, setCorrectChars] = useState(0) // holds number of correct characters typed
@@ -19,6 +23,7 @@ export default function PracticeType() {
     const [accuracy, setAccuracy] = useState(0)
     const [showEndScreen, setShowEndScreen] = useState(false)
     
+    // jsx output
     return (
         <div>
             <Head>
@@ -53,6 +58,7 @@ export default function PracticeType() {
                                     <button className={testLength===120 ? "text-pink-300" : "text-white"} onClick={() => setTestLength(120)}>120</button>
                                 </div>
                             </div>
+                            {/* switch statement to find out which component to render based on mode selected */}
                             {(() => {
                                 switch (testMode) {
                                     case "words":

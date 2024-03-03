@@ -1,12 +1,16 @@
 // component for the end screen that shows on the completion of a multiplayer test
+
+// library imports
 import Axios from 'axios'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function MultiEnd({ roomName, roomCreator, userResults, setJoinedRoom, userDetails, setUserDetails, socket }) {
+    // state variables
     const [leaderboardArray, setLeaderboardArray] = useState([])
     const [leaderboardFetched, setLeaderboardFetched] = useState(false)
     let userScores = userResults[0]
 
+    // function used to sort the scores of the users
     const sortScores = (userScores) => {
         // sort descending by value (WPM score)
         // convert object to 2d array
@@ -23,6 +27,7 @@ export default function MultiEnd({ roomName, roomCreator, userResults, setJoined
         return sortedArr
     }
 
+    // function used to update the high score of the user
     const updateHighScore = (userScores) => {
         // compare user score with stored high scores in userDetails and send POST request to update high score if necessary
         let userScore = userResults[0][userDetails.username] // the user's score 
@@ -62,6 +67,7 @@ export default function MultiEnd({ roomName, roomCreator, userResults, setJoined
     userScores = sortScores(userScores)
 
     useEffect(() => {
+        // updating high scores
         updateHighScore(userScores)
         // getting the leaderboard
         Axios.get("http://localhost:3001/get-leaderboard").then((response) => {
@@ -100,11 +106,13 @@ export default function MultiEnd({ roomName, roomCreator, userResults, setJoined
         }
     }, [leaderboardFetched])
 
+    // jsx output
     return (
         <div>
             <h2 className="text-center text-3xl">RESULTS</h2>
             <div className="mt-[5vh]">
                 <ol className="">
+                    {/* listing the users and their scores */}
                     {userScores.map((user, i) => {
                         return (
                             <li style={{color:(i===0 ? "lightGreen" : "white")}} className="flex justify-around mb-[3vh]">

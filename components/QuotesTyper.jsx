@@ -1,7 +1,10 @@
+// components for the 'quotes' game mode in the offline typing mode
+
+// library imports
 import {useState, useEffect} from "react"
 import { GetQuote } from "../scripts/getQuote"
 
-
+// functions for formatting the text so that it can be used properly in the OnlineTest component
 const getLetters = (text) => {
     let letters = []
     for (let letter of text) {
@@ -32,6 +35,7 @@ const getPreviousLengths = (words, index) => {
 }
 
 export default function QuotesTyper({ wpm, setWPM, accuracy, setAccuracy, showEndScreen, setShowEndScreen, char, setChar, correctChars, setCorrectChars, timeTaken, setTimeTaken }) {
+    // state variables
     const [text, setText] = useState("")
     let words = text.split(" ")
     let letters = getLetters(text)
@@ -156,10 +160,11 @@ export default function QuotesTyper({ wpm, setWPM, accuracy, setAccuracy, showEn
         }
     }, [index])
 
+    // calculate the WPM score and accuracy scores depending on the time taken and characters typed
     useEffect(() => {
         const wordsTyped = correctChars/averageCharactersPerWord
-        const secondsTaken= timeTaken/1000 // timeTaken is in milliseconds
-        const acc= correctChars/char
+        const secondsTaken = timeTaken/1000 // timeTaken is in milliseconds
+        const acc = correctChars/char
         console.log("Correct characters typed: " + correctChars)
         console.log("Characters typed: " + char)
         console.log("Accuracy: " + acc*100)
@@ -173,10 +178,12 @@ export default function QuotesTyper({ wpm, setWPM, accuracy, setAccuracy, showEn
         }
     }, [wpm])
 
+    // jsx output
     return (
         <div className="py-20 px-11 w-[95vw] ">
             <div className="flex justify-center">
                 <div className="flex flex-row flex-wrap">
+                    {/* showing the text */}
                     {lettersEls.map((letterEl, idx) => {
                         return (
                             <div>
@@ -187,26 +194,13 @@ export default function QuotesTyper({ wpm, setWPM, accuracy, setAccuracy, showEn
                 </div>
             </div>
             <div className="flex-col my-[5vh] flex w-[95vw] items-center justify-center">
+                {/* input box that allows users to type the letters corresponding to the text shown above */}
                 <input onKeyDown={() => checkCorrect(event)} onKeyUp={() => checkDeleted(event)} 
                     autoFocus className="rounded text-black width" type="text" tabIndex={0} 
                     autoComplete="off" autoCapitalize="off" autoCorrect="off" 
                     data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" list="autocompleteOff"/>
                 <button className="mt-[5vh] text-white text-3xl" onClick={() => location.reload()}>⟳</button>
             </div>
-            {(wpm > 0) 
-                ? <div className="flex w-[95vw] justify-around">
-                    <div className="w-[30vw] flex flex-col justify-center items-center">
-                        <h3 className="font-bold text-2xl mb-2">words per minute</h3>
-                        <p>{Math.round(wpm*10)/10}</p>
-                    </div>
-                    <div className="w-[30vw] flex flex-col justify-center items-center">
-                        <h3 className="font-bold text-2xl mb-2">accuracy</h3>
-                        <p>{Math.round(accuracy*10)/10}%</p>
-                    </div>
-                </div>
-                :
-                <div></div>
-            }
         </div>
     )
 }

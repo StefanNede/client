@@ -1,5 +1,9 @@
+// component for the typing test that gets loaded into the online rooms
+
+// library imports
 import {useState, useEffect} from "react"
 
+// functions for formatting the text so that it can be used properly in the OnlineTest component
 const getLetters = (text) => {
     let letters = []
     for (let letter of text) {
@@ -30,6 +34,7 @@ const getPreviousLengths = (words, index) => {
 }
 
 export default function OnlineTest({ text, socket, username, roomName, startTime, usersFinished, setUsersFinished }) {
+    // state variables
     let words = text.split(" ")
     let letters = getLetters(text)
     const [lettersEls, setLettersEls] = useState([])
@@ -39,10 +44,7 @@ export default function OnlineTest({ text, socket, username, roomName, startTime
 
     const [char, setChar] = useState(0)
     const [correctChars, setCorrectChars] = useState(0)
-    const [wpm, setWPM] = useState(0)
-    const [accuracy, setAccuracy] = useState(0)
 
-    const [timeTaken, setTimeTaken] = useState(0)
     const averageCharactersPerWord = 5
 
     useEffect(() => {
@@ -101,7 +103,6 @@ export default function OnlineTest({ text, socket, username, roomName, startTime
             let currentWordsTyped = correctChars/averageCharactersPerWord
             let currentWPM  = (currentWordsTyped/secondsPassed)*60
 
-            // setTimeTaken(finish.getTime() - startTime)
             socket.emit("word_typed", {roomName:roomName, username:username, wordIndex:index+1, currentWPM:currentWPM})
 
             if (wordTyped == words[index]) {
@@ -157,21 +158,12 @@ export default function OnlineTest({ text, socket, username, roomName, startTime
         }
     }, [index])
 
-    useEffect(() => {
-        const wordsTyped = correctChars/averageCharactersPerWord
-        const secondsTaken= timeTaken/1000 // timeTaken is in milliseconds
-        const acc= correctChars/char
-        console.log("Correct characters typed: " + correctChars)
-        console.log("Characters typed: " + char)
-        console.log("Accuracy: " + acc*100)
-        setWPM((wordsTyped/secondsTaken) * 60)
-        setAccuracy(acc*100)
-    }, [timeTaken])
-
+    // jsx output
     return (
         <div className="py-20 px-11 w-[95vw] ">
             <div className="flex justify-center">
                 <div className="flex flex-row flex-wrap">
+                    {/* showing the text */}
                     {lettersEls.map((letterEl, idx) => {
                         return (
                             <div>
@@ -182,26 +174,12 @@ export default function OnlineTest({ text, socket, username, roomName, startTime
                 </div>
             </div>
             <div className="flex-col my-[5vh] flex w-[95vw] items-center justify-center">
+                {/* input box that allows users to type the letters corresponding to the text shown above */}
                 <input onKeyDown={() => checkCorrect(event)} onKeyUp={() => checkDeleted(event)} 
                     autoFocus className="rounded text-black width" type="text" tabIndex={0} 
                     autoComplete="off" autoCapitalize="off" autoCorrect="off" 
                     data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" list="autocompleteOff"/>
             </div>
-            {(wpm > 0) 
-                ? <div className="flex w-[95vw] justify-around">
-                    <div className="w-[30vw] flex flex-col justify-center items-center">
-                        <h3 className="font-bold text-2xl mb-2">words per minute</h3>
-                        <p>{Math.round(wpm*10)/10}</p>
-                    </div>
-                    <div className="w-[30vw] flex flex-col justify-center items-center">
-                        <h3 className="font-bold text-2xl mb-2">accuracy</h3>
-                        <p>{Math.round(accuracy*10)/10}%</p>
-                    </div>
-                </div>
-                :
-                <div></div>
-            }
         </div>
     )
 }
-

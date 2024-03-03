@@ -1,3 +1,6 @@
+// code for the Home page
+
+// library imports
 import Head from 'next/head';
 import Navbar from "../components/Navbar";
 import Layout from '../components/layout';
@@ -6,6 +9,7 @@ import { useState, useEffect } from "react";
 import Stats from '../components/Stats';
 
 export default function Home() {
+  // state variables
   // variables for logging in
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -27,8 +31,8 @@ export default function Home() {
     // for debugging purposes
     console.log(`registering with username ${usernameReg} and password ${passwordReg}`)
 
+    // backend POST request to register
     Axios.post("http://localhost:3001/register", {username: usernameReg, password: passwordReg}).then((response) => {
-
       if (response.data) {
         // if there has been an error -> username already in use alert it to the user
         alert(response.data.message)
@@ -40,6 +44,7 @@ export default function Home() {
 
   // logging in
   const login = () => {
+    // backend POST request to login
     Axios.post("http://localhost:3001/login", {username: username, password: password}).then((response) => {
       let data = response.data
       console.log(data)
@@ -57,6 +62,7 @@ export default function Home() {
   }
 
   useEffect(() => {
+    // backend GET request to check if user is logged in already
     Axios.get("http://localhost:3001/login").then((response) => {
       if (response.data.loggedIn) {
         setUserDetails(response.data.user[0])
@@ -70,6 +76,7 @@ export default function Home() {
     console.log(userDetails)
   }, [userDetails])
 
+  // jsx output
   return (
     <Layout>
       <div >
@@ -126,9 +133,5 @@ export default function Home() {
        </main>
       </div>
     </Layout>
-  );
+  )
 }
-
-
-
-

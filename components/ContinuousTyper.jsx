@@ -1,6 +1,4 @@
-import {useState, useEffect} from "react"
-import { GetText } from "../scripts/getText"
-
+// component for unfinished continuous typing game mode
 export default function ContinuousTyper() {
     return (
         <div className="w-[95vw] h-[40vh] flex items-center justify-center">

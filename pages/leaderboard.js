@@ -1,9 +1,13 @@
+// code for the Leaderboard page
+
+// library imports
 import Axios from 'axios'
 import Navbar from "../components/Navbar"
 import Head from 'next/head';
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 
 export default function Leaderboard() {
+    // state variable
     const [leaderboard, setLeaderboard] = useState([])
     
     // get leaderboard from database
@@ -13,6 +17,7 @@ export default function Leaderboard() {
         })
     }, [])
 
+    // jsx output
     return (
         <div>
             <Head>
@@ -32,6 +37,7 @@ export default function Leaderboard() {
                                 <th className="w-[55vw]">Username</th>
                                 <th className="w-[20vw]">Score</th>
                             </tr>
+                            {/* use a for each loop to go render each user onto the screen */}
                             {leaderboard.map((user, rank) => {
                                 return (
                                     <tr className="w-100">

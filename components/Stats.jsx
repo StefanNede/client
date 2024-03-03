@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react"
+// component for showing the lifetime stats of a user once they have logged in
 
 export default function Stats({ userDetails, setLoginBool, setLoginStatus }) {
     let bestScore = userDetails.bestScore
@@ -12,6 +12,7 @@ export default function Stats({ userDetails, setLoginBool, setLoginStatus }) {
         setLoginStatus("Not Logged In")
     }
 
+    // jsx output
     return (
         <div className="h-[70vh]">
             <button className="ml-[85vw] bg-white text-black rounded py-1 px-2" onClick={logout}>Logout</button>

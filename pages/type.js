@@ -1,3 +1,6 @@
+// code for the Type page which holds the list of online rooms and button for going into offline mode
+
+// library imports
 import Head from 'next/head'
 import Navbar from "../components/Navbar"
 import Link from "next/link"
@@ -11,12 +14,13 @@ import { GetText } from "../scripts/getText"
 const socket = io.connect("http://localhost:3001")
 
 export default function Type() {
-    const [roomName, setRoomName] = useState("")
-    const [availableRooms, setAvailableRooms] = useState([])
+    // state variables
+    const [roomName, setRoomName] = useState("") // holds online room name user wants to join
+    const [availableRooms, setAvailableRooms] = useState([]) // holds list of all available online rooms
     const [joinedRoom, setJoinedRoom] = useState(false)
     const [userDetails, setUserDetails] = useState({})
-    const [loginBool, setLoginBool] = useState(false)
-    const [roomTest, setRoomTest] = useState(GetText(50))
+    const [loginBool, setLoginBool] = useState(false) // holds whether the user is logged in or not
+    const [roomTest, setRoomTest] = useState(GetText(50)) // holds the 50 word test that a new room will get
     const [roomCreator, setRoomCreator] = useState("")
 
     Axios.defaults.withCredentials = true
@@ -30,6 +34,7 @@ export default function Type() {
         return false
     }
 
+    // function called when the 'create room' form is submitted
     const createRoom = () => {
         if (roomNameExists(roomName)) {
             // prevent creating a room that has the same room name as one that already exists
@@ -108,6 +113,7 @@ export default function Type() {
     }, [])
     console.log(availableRooms)
 
+    // jsx output
     return (
         <div>
             <Head>
@@ -119,9 +125,11 @@ export default function Type() {
                 <Navbar/>
                 <div className="p-5">
                     <h1 className="text-center font-bold mb-4 text-2xl lg:text-4xl">Type</h1>
+                    {/* conditional rendering of either the online room the user has joined or the default Type page */}
                     { !joinedRoom ? 
                         <div className="flex flex-col">
                             <button className="p-1 bg-white rounded">
+                                {/* link to offline practice page */}
                                 <Link href="/practiceType" className="text-black" aria-current="page">Offline Private Practice</Link>
                             </button>
                             <div className="mt-[5vh]">

@@ -1,8 +1,11 @@
+// component for the page that shows at the end of a typing test showing the results of it
 export default function EndOfTest({showEndScreen, setShowEndScreen, wpm, accuracy, testMode, testLength, char, correctChars, timeTaken}) {
     function resetTest() {
         setShowEndScreen(false)
         location.reload()
     }
+
+    // jsx output
     return (
         <div>
             <div className="flex flex-col bg-green-">
